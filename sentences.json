@@ -1,0 +1,7 @@
+[
+  {"id":1,"sentence":"The capital of France is _____.","answer":"Paris","collection":"Default","nativeSentence":"The capital of France is Paris.","nativeKeyword":"Paris","explanation":"Paris is the capital and largest city of France."},
+  {"id":2,"sentence":"Water _____ at 100 degrees Celsius at sea level.","answer":"boils","collection":"Default","nativeSentence":"Water boils at 100 degrees Celsius at sea level.","nativeKeyword":"boils","explanation":"At standard atmospheric pressure, water boils at 100°C (212°F)."},
+  {"id":3,"sentence":"The _____ is the largest planet in our solar system.","answer":"Jupiter","collection":"Default","nativeSentence":"Jupiter is the largest planet in our solar system.","nativeKeyword":"Jupiter","explanation":"Jupiter has more than twice the mass of all other planets combined."},
+  {"id":4,"sentence":"Photosynthesis allows plants to convert _____ into energy.","answer":"sunlight","collection":"Default","nativeSentence":"Photosynthesis allows plants to convert sunlight into energy.","nativeKeyword":"sunlight","explanation":"Plants use sunlight, water, and CO₂ to produce glucose and oxygen."},
+  {"id":5,"sentence":"The Great Wall of China was built to _____ against invasions.","answer":"protect","collection":"Default","nativeSentence":"The Great Wall of China was built to protect against invasions.","nativeKeyword":"protect","explanation":"It was constructed over centuries to defend northern borders."}
+]
