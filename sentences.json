@@ -1,7 +1,272 @@
 [
-  {"id":1,"sentence":"The capital of France is _____.","answer":"Paris","collection":"Default","nativeSentence":"The capital of France is Paris.","nativeKeyword":"Paris","explanation":"Paris is the capital and largest city of France."},
-  {"id":2,"sentence":"Water _____ at 100 degrees Celsius at sea level.","answer":"boils","collection":"Default","nativeSentence":"Water boils at 100 degrees Celsius at sea level.","nativeKeyword":"boils","explanation":"At standard atmospheric pressure, water boils at 100°C (212°F)."},
-  {"id":3,"sentence":"The _____ is the largest planet in our solar system.","answer":"Jupiter","collection":"Default","nativeSentence":"Jupiter is the largest planet in our solar system.","nativeKeyword":"Jupiter","explanation":"Jupiter has more than twice the mass of all other planets combined."},
-  {"id":4,"sentence":"Photosynthesis allows plants to convert _____ into energy.","answer":"sunlight","collection":"Default","nativeSentence":"Photosynthesis allows plants to convert sunlight into energy.","nativeKeyword":"sunlight","explanation":"Plants use sunlight, water, and CO₂ to produce glucose and oxygen."},
-  {"id":5,"sentence":"The Great Wall of China was built to _____ against invasions.","answer":"protect","collection":"Default","nativeSentence":"The Great Wall of China was built to protect against invasions.","nativeKeyword":"protect","explanation":"It was constructed over centuries to defend northern borders."}
+  {
+    "id": 1,
+    "sentence": "_____ 是中国的首都。",
+    "answer": "北京",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Beijing is the capital of China.",
+    "nativeKeyword": "Beijing",
+    "explanation": "Beijing has been the political and cultural center of China for centuries."
+  },
+  {
+    "id": 2,
+    "sentence": "我 _____ 苹果。",
+    "answer": "喜欢",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I like apples.",
+    "nativeKeyword": "like",
+    "explanation": "'喜欢' means 'to like' and is used for people, things, or activities."
+  },
+  {
+    "id": 3,
+    "sentence": "你 _____ 什么？",
+    "answer": "叫",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "What are you called? (What is your name?)",
+    "nativeKeyword": "called",
+    "explanation": "'叫' literally means 'to call' and is used to ask for names."
+  },
+  {
+    "id": 4,
+    "sentence": "我 _____ 学生。",
+    "answer": "是",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I am a student.",
+    "nativeKeyword": "am",
+    "explanation": "'是' is the verb 'to be' in Chinese, used similarly to English."
+  },
+  {
+    "id": 5,
+    "sentence": "他 _____ 老师。",
+    "answer": "是",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "He is a teacher.",
+    "nativeKeyword": "is",
+    "explanation": "'是' doesn't change form based on the subject like in English."
+  },
+  {
+    "id": 6,
+    "sentence": "她 _____ 中国。",
+    "answer": "在",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "She is in China.",
+    "nativeKeyword": "in",
+    "explanation": "'在' means 'to be located at' and is used for places."
+  },
+  {
+    "id": 7,
+    "sentence": "我们 _____ 朋友。",
+    "answer": "是",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "We are friends.",
+    "nativeKeyword": "are",
+    "explanation": "'朋友' means 'friend'. Add '们' for plural pronouns like '我们' (we)."
+  },
+  {
+    "id": 8,
+    "sentence": "你 _____ 茶吗？",
+    "answer": "喝",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Do you drink tea?",
+    "nativeKeyword": "drink",
+    "explanation": "'喝' is the verb for drinking liquids like tea, water, or coffee."
+  },
+  {
+    "id": 9,
+    "sentence": "我 _____ 米饭。",
+    "answer": "吃",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I eat rice.",
+    "nativeKeyword": "eat",
+    "explanation": "'吃' is the verb for eating food."
+  },
+  {
+    "id": 10,
+    "sentence": "今天天气 _____ 。",
+    "answer": "很好",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Today's weather is very good.",
+    "nativeKeyword": "very good",
+    "explanation": "'很' means 'very' and is commonly used before adjectives."
+  },
+  {
+    "id": 11,
+    "sentence": "我 _____ 北京。",
+    "answer": "去",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I am going to Beijing.",
+    "nativeKeyword": "go",
+    "explanation": "'去' means 'to go'. Destination comes after the verb."
+  },
+  {
+    "id": 12,
+    "sentence": "你 _____ 住哪里？",
+    "answer": "在",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Where do you live?",
+    "nativeKeyword": "at/in",
+    "explanation": "'在' is used with location to express where someone lives."
+  },
+  {
+    "id": 13,
+    "sentence": "我 _____ 美国人。",
+    "answer": "是",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I am American.",
+    "nativeKeyword": "am",
+    "explanation": "Nationalities are formed with country name + 人 (person)."
+  },
+  {
+    "id": 14,
+    "sentence": "你 _____ 岁？",
+    "answer": "几",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "How old are you?",
+    "nativeKeyword": "how many",
+    "explanation": "'几岁' is used to ask age, especially for children."
+  },
+  {
+    "id": 15,
+    "sentence": "我 _____ 二十岁。",
+    "answer": "今年",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I am twenty years old this year.",
+    "nativeKeyword": "this year",
+    "explanation": "'今年' means 'this year'. Age is expressed with number + 岁."
+  },
+  {
+    "id": 16,
+    "sentence": "你 _____ 名字？",
+    "answer": "的",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Your name?",
+    "nativeKeyword": "(possessive particle)",
+    "explanation": "'的' indicates possession, like 's in English."
+  },
+  {
+    "id": 17,
+    "sentence": "猫 _____ 鱼。",
+    "answer": "喜欢",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Cats like fish.",
+    "nativeKeyword": "like",
+    "explanation": "Word order is Subject + Verb + Object, just like English."
+  },
+  {
+    "id": 18,
+    "sentence": "他 _____ 很高。",
+    "answer": "长",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "He is very tall.",
+    "nativeKeyword": "is (descriptive)",
+    "explanation": "In Chinese, adjectives can function as verbs, so no 'is' needed."
+  },
+  {
+    "id": 19,
+    "sentence": "我 _____ 去学校。",
+    "answer": "想",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I want to go to school.",
+    "nativeKeyword": "want",
+    "explanation": "'想' means 'to want' or 'would like to'."
+  },
+  {
+    "id": 20,
+    "sentence": "我们 _____ 看电影。",
+    "answer": "一起",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "We watch movies together.",
+    "nativeKeyword": "together",
+    "explanation": "'一起' means 'together' and comes before the verb."
+  },
+  {
+    "id": 21,
+    "sentence": "这个 _____ 多少钱？",
+    "answer": "东西",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "How much is this thing?",
+    "nativeKeyword": "thing",
+    "explanation": "'这个' means 'this'. '多少钱' is used to ask the price."
+  },
+  {
+    "id": 22,
+    "sentence": "我 _____ 书。",
+    "answer": "看",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I read books.",
+    "nativeKeyword": "read",
+    "explanation": "'看' can mean 'to read' or 'to watch' depending on context."
+  },
+  {
+    "id": 23,
+    "sentence": "你 _____ 中文吗？",
+    "answer": "会说",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Can you speak Chinese?",
+    "nativeKeyword": "can speak",
+    "explanation": "'会' indicates ability, '说' means 'to speak'."
+  },
+  {
+    "id": 24,
+    "sentence": "我 _____ 一点点。",
+    "answer": "会",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I know a little bit.",
+    "nativeKeyword": "can/know",
+    "explanation": "'一点点' means 'a little bit'."
+  },
+  {
+    "id": 25,
+    "sentence": "他 _____ 工作？",
+    "answer": "在哪儿",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Where does he work?",
+    "nativeKeyword": "where",
+    "explanation": "'在哪儿' means 'where' and is used for locations."
+  },
+  {
+    "id": 26,
+    "sentence": "我 _____ 银行工作。",
+    "answer": "在",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "I work at a bank.",
+    "nativeKeyword": "at",
+    "explanation": "'在' is used to indicate the location where an action takes place."
+  },
+  {
+    "id": 27,
+    "sentence": "我们 _____ 吃饭。",
+    "answer": "一起",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "We eat together.",
+    "nativeKeyword": "together",
+    "explanation": "Sharing meals is an important part of Chinese culture."
+  },
+  {
+    "id": 28,
+    "sentence": "你 _____ 茶还是咖啡？",
+    "answer": "喝",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Do you drink tea or coffee?",
+    "nativeKeyword": "drink",
+    "explanation": "'还是' is used for 'or' in questions, not statements."
+  },
+  {
+    "id": 29,
+    "sentence": "今天 _____ 月几号？",
+    "answer": "几",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "What is the date today?",
+    "nativeKeyword": "what (number)",
+    "explanation": "Dates are expressed as number + 月 (month) + number + 号 (day)."
+  },
+  {
+    "id": 30,
+    "sentence": "明天 _____ 星期一。",
+    "answer": "是",
+    "collection": "Chinese Beginner",
+    "nativeSentence": "Tomorrow is Monday.",
+    "nativeKeyword": "is",
+    "explanation": "Days of the week are numbered, with Monday as 星期一 (day 1 of the week)."
+  }
 ]
