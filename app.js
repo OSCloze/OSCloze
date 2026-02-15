@@ -1119,15 +1119,18 @@ sentences.forEach(function(item) {
         el.viewExplanation.hidden = !item.explanation;
         el.viewExplanation.textContent = 'View Explanation';
       }
-      // Keep explanation hidden initially
+      // Clear any old explanation text and keep hidden
+      el.explanation.textContent = ''; // Clear old explanation
       el.explanation.hidden = true;
     } else {
       // For incorrect answers: auto-show explanation and hide the button
       if (item.explanation) {
         el.explanation.hidden = false;
         el.explanation.textContent = item.explanation;
+        console.log('Incorrect answer: Explanation set to:', item.explanation);
       } else {
         el.explanation.hidden = true;
+        el.explanation.textContent = ''; // Clear if no explanation
       }
       // Hide the View Explanation button for incorrect answers
       if (el.viewExplanation) {
@@ -1288,6 +1291,19 @@ if (el.uploadSaveFile) {
     el.next.addEventListener('click', onNext);
     if (el.viewExplanation) {
       el.viewExplanation.addEventListener('click', function () {
+        const item = sessionSentences[index]; // Get current item
+        
+        if (el.explanation.hidden) {
+          // We're about to show the explanation - set the correct text
+          if (item && item.explanation) {
+            el.explanation.textContent = item.explanation;
+            console.log('Setting explanation to:', item.explanation);
+          } else {
+            el.explanation.textContent = 'No explanation available.';
+          }
+        }
+        
+        // Toggle visibility
         el.explanation.hidden = !el.explanation.hidden;
         el.viewExplanation.textContent = el.explanation.hidden ? 'View Explanation' : 'Hide Explanation';
       });
