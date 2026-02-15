@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloze Practice</title>
+  <title>OSCloze · Chinese Cloze Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,9 +17,8 @@
     <div class="content">
       <section id="playView" class="view is-active" role="main" data-view="play">
         <header class="header header--play">
-          <h1>Cloze Practice</h1>
+          <h1>OSCloze</h1>
           <div class="header-play-actions">
-            <div class="sentence-stars" id="sentenceStars" aria-label="Stars for this sentence"></div>
             <button type="button" id="playSettingsBtn" class="icon-btn" aria-label="Play settings" title="Settings">&#9881;</button>
           </div>
         </header>
@@ -43,26 +42,26 @@
           <div id="playGame" class="main">
             <p class="progress" id="progress"></p>
             <p class="sentence sentence-target" id="sentence"></p>
+            <input
+              type="text"
+              id="answer"
+              autocomplete="off"
+              aria-label="Your answer"
+              class="answer-input"
+            />
             <p class="sentence sentence-native" id="sentenceNative"></p>
-            <div class="answer-row" id="answerRow">
-              <div class="answer-wrap">
-                <div class="answer-overlay" id="answerOverlay" aria-hidden="true"></div>
-                <input
-                  type="text"
-                  id="answer"
-                  placeholder="Type the missing word..."
-                  autocomplete="off"
-                  aria-label="Your answer"
-                />
-              </div>
+            <div id="answerRow" class="check-row">
               <button type="button" id="check" class="btn btn-primary">Check</button>
             </div>
             <div class="feedback" id="feedback" role="status" aria-live="polite" hidden></div>
+            <div class="post-check-row" id="postCheckRow" hidden>
+              <button type="button" id="next" class="btn btn-secondary">Next</button>
+              <button type="button" id="viewExplanation" class="btn btn-ghost">View Explanation</button>
+            </div>
             <div class="explanation" id="explanation" hidden></div>
-            <button type="button" id="next" class="btn btn-secondary" hidden>Next</button>
           </div>
           <div id="playReview" class="review-panel">
-            <h2 class="review-title">What you learned</h2>
+            <h2 class="review-title">本课总结</h2>
             <ul class="review-list" id="reviewList"></ul>
             <button type="button" id="playAgain" class="btn btn-primary">Play again</button>
           </div>
@@ -77,9 +76,6 @@
         <div class="sentences-toolbar">
           <button type="button" id="openAddSentence" class="btn btn-primary">Add sentence</button>
           <button type="button" id="newCollectionBtn" class="btn btn-secondary">New collection</button>
-          <select id="filterCollection" class="filter-collection" aria-label="Filter by collection">
-            <option value="">All collections</option>
-          </select>
         </div>
         <ul class="sentence-list" id="sentenceList" aria-label="All sentences"></ul>
       </section>
@@ -94,9 +90,20 @@
             <span class="toggle-slider"></span>
             <span class="toggle-text">Light mode</span>
           </label>
+          
+          <h2 class="settings-subtitle">Progress</h2>
           <p class="settings-desc">Reset all star progress for every sentence. This cannot be undone.</p>
           <button type="button" id="resetProgress" class="btn btn-secondary">Reset all progress</button>
           <p id="resetConfirm" class="settings-confirm" hidden>Progress has been reset.</p>
+          
+          <h2 class="settings-subtitle" style="margin-top: 1.5rem;">Backup & Restore</h2>
+          <p class="settings-desc">Download your data (stars, custom sentences, edits, collections) as a backup file.</p>
+          <button type="button" id="downloadSaveBtn" class="btn btn-primary">Download Save File</button>
+          
+          <p class="settings-desc" style="margin-top: 1rem;">Restore from a previously downloaded backup file. This will overwrite your current data.</p>
+          <input type="file" id="uploadSaveFile" accept=".json" style="display: none;" />
+          <button type="button" id="restoreSaveBtn" class="btn btn-secondary">Restore from File</button>
+          <p id="restoreConfirm" class="settings-confirm" hidden></p>
         </div>
       </section>
     </div>
@@ -109,10 +116,18 @@
         <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
       </div>
       <div class="modal-body">
+        <div class="form-row form-row--edit-only" id="formStarRow" hidden>
+          <div class="form-star-display">
+            <span class="form-label">Progress</span>
+            <div class="form-star-line">
+              <span id="formStarDisplay" class="form-star-value"></span>
+              <button type="button" id="resetSingleStar" class="btn btn-secondary btn-sm">Reset</button>
+            </div>
+          </div>
+        </div>
         <div class="form-row">
           <label for="formCollection" class="form-label">Collection</label>
-          <input type="text" id="formCollection" class="form-input" list="formCollectionList" placeholder="e.g. Chapter 1, Verbs" />
-          <datalist id="formCollectionList"></datalist>
+          <select id="formCollection" class="form-input form-select" aria-label="Select collection"></select>
         </div>
         <div class="form-row">
           <label for="formSentence" class="form-label">Target language (sentence with blank)</label>
@@ -122,6 +137,10 @@
         <div class="form-row">
           <label for="formNativeSentence" class="form-label">Native language (full sentence)</label>
           <input type="text" id="formNativeSentence" class="form-input" placeholder="e.g. The capital of France is Paris." />
+        </div>
+        <div class="form-row">
+          <label for="formPinyin" class="form-label">Pinyin (optional)</label>
+          <input type="text" id="formPinyin" class="form-input" placeholder="e.g. bā lí shì fà guó de shǒu dū." />
         </div>
         <div class="form-row">
           <label for="formNativeKeyword" class="form-label">Keyword in native sentence to highlight (optional)</label>
@@ -153,10 +172,16 @@
         <button type="button" class="modal-close" id="playSettingsClose" aria-label="Close">&times;</button>
       </div>
       <div class="modal-body">
-        <label class="toggle-switch" aria-label="Highlight keyword in native sentence">
+        <label class="toggle-switch" aria-label="Highlight keyword">
           <input type="checkbox" id="highlightKeywordPlay" />
           <span class="toggle-slider"></span>
-          <span class="toggle-text">Highlight keyword in native sentence</span>
+          <span class="toggle-text">Highlight keyword</span>
+        </label>
+        
+        <label class="toggle-switch" aria-label="Show pinyin" style="margin-top: 1rem;">
+          <input type="checkbox" id="showPinyinToggle" />
+          <span class="toggle-slider"></span>
+          <span class="toggle-text">Show pinyin</span>
         </label>
       </div>
     </div>
@@ -183,4 +208,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
