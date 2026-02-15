@@ -526,6 +526,14 @@ body::before {
   width: 100%;  /* Ensure full width */
 }
 
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
 .progress {
   margin: 0;
   font-size: 0.78rem;
@@ -568,6 +576,12 @@ body::before {
   line-height: 1.4;
 }
 
+.sentence-part {
+  display: inline;
+  white-space: normal;
+  word-break: break-word;
+}
+
 /* Pinyin styling */
 .sentence-pinyin {
   font-size: 0.85rem;
@@ -580,6 +594,19 @@ body::before {
   border-left: 2px solid var(--accent2);
   padding-left: 0.75rem;
   line-height: 1.4;
+}
+
+/* Pinyin styling after answer - matching native sentence style */
+.sentence-pinyin-answer {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  font-style: italic;
+  font-family: var(--font);
+  border-left: 2px solid var(--border-gold);
+  padding-left: 0.75rem;
+  opacity: 0.9;
 }
 
 .review-pinyin {
@@ -794,6 +821,40 @@ body::before {
   word-break: break-word;
 }
 
+/* Mobile optimizations */
+@media (max-width: 520px) {
+  /* Fix for mobile keyboard issues */
+  .sentence-target {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    line-height: 1.8;
+  }
+  
+  .inline-answer-input {
+    /* Prevent the input from shifting */
+    vertical-align: middle;
+    margin: 0;
+    min-height: 2.2em;
+    /* Ensure it stays inline but doesn't cause wrapping issues */
+    max-width: 100%;
+    flex-shrink: 1;
+    flex-grow: 0;
+  }
+  
+  /* Ensure text before and after the input stays inline */
+  .sentence-target .sentence-pinyin {
+    width: 100%; /* Pinyin takes full width on mobile */
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Any text nodes need to be handled - we'll wrap them in spans in JS */
+}
+
+/* Also add a meta viewport fix in your HTML head if not present */
+
 /* Answer styling after check */
 .answer-correct {
   display: inline-block;
@@ -804,31 +865,13 @@ body::before {
   margin: 0 0.1em;
 }
 
-.answer-wrong {
+.answer-incorrect {
   display: inline-block;
   color: var(--wrong);
-  text-decoration: line-through;
-  text-decoration-color: var(--wrong);
-  padding: 0 0.2em;
-  margin-right: 0.3em;
-}
-
-/* Answer styling after check */
-.answer-correct {
-  display: inline-block;
-  color: var(--correct);
   font-weight: 700;
   padding: 0 0.2em;
-  border-bottom: 2px solid var(--correct);
-}
-
-.answer-wrong {
-  display: inline-block;
-  color: var(--wrong);
-  text-decoration: line-through;
-  text-decoration-color: var(--wrong);
-  padding: 0 0.2em;
-  margin-right: 0.5em;
+  border-bottom: 2px solid var(--wrong);
+  margin: 0 0.1em;
 }
 
 /* ── CHECK ROW ── */
@@ -858,47 +901,53 @@ body::before {
   width: 100%;
 }
 
-/* ── FEEDBACK ── */
+/* Feedback styling - now inline and smaller */
 .feedback {
-  padding: 0.9rem 1.15rem;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
   font-family: var(--font-head);
-  letter-spacing: 0.03em;
-  border-left-width: 4px;
-  border-left-style: solid;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid transparent;
 }
 
 .feedback.correct {
-  background: rgba(106, 184, 112, 0.1);
+  background: rgba(106, 184, 112, 0.15);
   color: var(--correct);
-  border-color: var(--correct);
-  border: 1px solid rgba(106, 184, 112, 0.3);
-  border-left: 4px solid var(--correct);
-  box-shadow: 0 0 16px rgba(106, 184, 112, 0.1);
-  animation: seal-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  border-color: rgba(106, 184, 112, 0.3);
+  animation: gentle-appear 0.3s ease;
 }
 
 .feedback.wrong {
-  background: rgba(200, 40, 30, 0.1);
+  background: rgba(200, 40, 30, 0.12);
   color: var(--accent);
-  border: 1px solid rgba(200, 40, 30, 0.25);
-  border-left: 4px solid var(--accent);
-  animation: drum-shake 0.45s ease both;
+  border-color: rgba(200, 40, 30, 0.25);
+  animation: gentle-appear 0.3s ease;
 }
 
-/* Stars in feedback */
+/* Stars in feedback - smaller to match */
 .feedback-stars {
   display: inline-flex;
   gap: 0.05em;
-  margin-left: 0.4em;
-  font-size: 1.1em;
+  margin-left: 0.2em;
+  font-size: 0.9em;
   vertical-align: middle;
 }
 
-.feedback-stars .star        { display: inline-block; color: var(--star-empty); }
-.feedback-stars .star.filled { color: var(--star-filled); text-shadow: 0 0 6px rgba(232, 160, 32, 0.7); }
+.feedback-stars .star { 
+  display: inline-block; 
+  color: var(--star-empty); 
+  font-size: 0.9rem;
+}
+
+.feedback-stars .star.filled { 
+  color: var(--star-filled); 
+  text-shadow: 0 0 4px rgba(232, 160, 32, 0.5); 
+}
 
 /* ── NATIVE SENTENCE + EXPLANATION ── */
 .sentence-native {
@@ -921,13 +970,16 @@ body::before {
   font-style: normal;
 }
 
+/* Make sure explanation is visible */
 .explanation {
   font-size: 0.87rem;
   color: var(--muted);
   line-height: 1.6;
-  padding: 0;
-  background: none;
-  border: none;
+  padding: 0.75rem 1rem;
+  background: var(--surface3);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--accent2);
+  margin-top: 0.5rem;
   animation: slide-up 0.28s ease both;
 }
 
