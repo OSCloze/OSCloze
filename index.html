@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>OSCloze · Chinese Cloze Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -40,7 +40,10 @@
             <button type="button" id="playStart" class="btn btn-primary">Start</button>
           </div>
           <div id="playGame" class="main">
-            <p class="progress" id="progress"></p>
+            <div class="game-header">
+              <p class="progress" id="progress"></p>
+              <div class="feedback" id="feedback" role="status" aria-live="polite" hidden></div>
+            </div>
             <p class="sentence sentence-target" id="sentence"></p>
             <input
               type="text"
@@ -53,12 +56,11 @@
             <div id="answerRow" class="check-row">
               <button type="button" id="check" class="btn btn-primary">Check</button>
             </div>
-            <div class="feedback" id="feedback" role="status" aria-live="polite" hidden></div>
+            <div class="explanation" id="explanation" hidden></div>
             <div class="post-check-row" id="postCheckRow" hidden>
               <button type="button" id="next" class="btn btn-secondary">Next</button>
               <button type="button" id="viewExplanation" class="btn btn-ghost">View Explanation</button>
             </div>
-            <div class="explanation" id="explanation" hidden></div>
           </div>
           <div id="playReview" class="review-panel">
             <h2 class="review-title">本课总结</h2>
@@ -176,12 +178,6 @@
           <input type="checkbox" id="highlightKeywordPlay" />
           <span class="toggle-slider"></span>
           <span class="toggle-text">Highlight keyword</span>
-        </label>
-        
-        <label class="toggle-switch" aria-label="Show pinyin" style="margin-top: 1rem;">
-          <input type="checkbox" id="showPinyinToggle" />
-          <span class="toggle-slider"></span>
-          <span class="toggle-text">Show pinyin</span>
         </label>
       </div>
     </div>
