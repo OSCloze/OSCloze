@@ -8,7 +8,6 @@
   const STORAGE_KEY_HIGHLIGHT = 'cloze-highlight-keyword';
   const STORAGE_KEY_THEME = 'cloze-theme';
   const STORAGE_KEY_COLLECTION_NAMES = 'cloze-collection-names';
-  const STORAGE_KEY_SHOW_PINYIN = 'cloze-show-pinyin';
   const SESSION_SIZE_OPTIONS = [5, 10, 20];
   const MAX_STARS = 5;
   const BLANK_PLACEHOLDER = '_____';
@@ -138,6 +137,7 @@
     resetSingleStar: document.getElementById('resetSingleStar'),
     deleteSentenceBtn: document.getElementById('deleteSentence'),
     navLinks: document.querySelectorAll('.nav-link'),
+    showPinyinToggle: document.getElementById('showPinyinToggle'),
     formPinyin: document.getElementById('formPinyin')
   };
 
@@ -295,18 +295,6 @@ function restoreFromFile(file) {
     return accepted.some(function (a) { return normalize(a) === n; });
   }
 
-  function getShowPinyin() {
-    try {
-      return localStorage.getItem(STORAGE_KEY_SHOW_PINYIN) === 'true';
-    } catch (_) {}
-    return false; // Default to false
-  }
-  
-  function setShowPinyin(on) {
-    try {
-      localStorage.setItem(STORAGE_KEY_SHOW_PINYIN, on ? 'true' : 'false');
-    } catch (_) {}
-  }
 
   function loadBuiltInSentences() {
     return fetch('sentences.json')
@@ -328,6 +316,12 @@ function restoreFromFile(file) {
   }
 
   function renderPinyin(item) {
+    console.log('renderPinyin called', { 
+      item: !!item, 
+      hasPinyin: !!(item && item.pinyin),
+      showPinyin: getShowPinyin() 
+    }); // Debug log
+    
     if (!item || !item.pinyin) return '';
     const showPinyin = getShowPinyin();
     if (!showPinyin) return '';
@@ -506,27 +500,24 @@ function restoreFromFile(file) {
     if (el.playContent) el.playContent.className = 'play-content play-content--game';
     currentAcceptedAnswers = getAcceptedAnswers(item);
     
-    // Render pinyin if enabled
-    const pinyinHtml = renderPinyin(item);
-    
-    // Split the sentence at the blank
+    // Split the sentence at the blank (NO PINYIN HERE)
     const parts = item.sentence.split(/_{2,}/);
     const before = escapeHtml(parts[0] || '');
     const after = escapeHtml(parts[1] || '');
     
     // Calculate input width based on answer length
     const answerLength = Array.from(primaryAnswer(item)).length;
-    const inputWidth = Math.max(answerLength, 3); // at least 3em
+    const inputWidth = Math.max(answerLength, 3);
     
-    // Build the sentence with an inline input field
-    const sentenceHtml = pinyinHtml + before + 
+    // Build the sentence with inline input (no pinyin)
+    const sentenceHtml = 
+      '<span class="sentence-part">' + before + '</span>' +
       '<input type="text" id="inlineAnswerInput" class="inline-answer-input" ' +
       'style="width: ' + inputWidth + 'em;" ' +
-      'placeholder="" value="" autocomplete="off">' + 
-      after;
+      'value="" autocomplete="off">' + 
+      '<span class="sentence-part">' + after + '</span>';
     
     el.sentence.innerHTML = sentenceHtml;
-    console.log('Sentence HTML set:', sentenceHtml);
     
     // Set native sentence if available
     if (el.sentenceNative) {
@@ -534,31 +525,28 @@ function restoreFromFile(file) {
       el.sentenceNative.innerHTML = renderNativeSentence(item, highlight);
     }
     
-    // Hide the original answer input (we won't use it anymore)
+    // Hide the original answer input
     el.answer.style.display = 'none';
-    el.answer.value = ''; // clear it
+    el.answer.value = '';
     
     // Get the inline input and set up event listeners
     const inlineInput = document.getElementById('inlineAnswerInput');
     if (inlineInput) {
-      console.log('Inline input found, focusing...');
       inlineInput.focus();
       
-      // Sync value with hidden input (for backward compatibility)
+      // Sync with hidden input
       inlineInput.addEventListener('input', function(e) {
         el.answer.value = e.target.value;
       });
       
-// Handle Enter key
-inlineInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    e.stopPropagation(); // Add this to prevent event from bubbling to document
-    onCheck();
-  }
-});
-    } else {
-      console.log('ERROR: Inline input not found');
+      // Handle Enter key
+      inlineInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          e.stopPropagation();
+          onCheck();
+        }
+      });
     }
     
     el.check.hidden = false;
@@ -1070,7 +1058,7 @@ sentences.forEach(function(item) {
 
   function onCheck() {
     const item = sessionSentences[index];
-    const given = el.answer.value; // value is synced from inline input
+    const given = el.answer.value;
     if (!item || given.trim() === '') return;
   
     const correct = isCorrect(given, item);
@@ -1085,40 +1073,71 @@ sentences.forEach(function(item) {
     const starsHtml = correct
       ? '<span class="feedback-stars" aria-label="' + starCount + ' of ' + MAX_STARS + ' stars">' + renderStars(starCount) + '</span>'
       : '';
-    const msg = correct
-      ? 'Correct! +1 star ' + starsHtml
-      : 'Not quite.';
+  
+    let msg = '';
+    if (correct) {
+      msg = 'Correct! ' + starsHtml;
+    } else {
+      msg = 'Not quite';
+    }
   
     el.feedback.innerHTML = msg;
     el.feedback.className = 'feedback ' + (correct ? 'correct' : 'wrong');
     el.feedback.hidden = false;
   
-    // Show Next + View Explanation row
-    if (el.postCheckRow) el.postCheckRow.hidden = false;
-  
-    if (el.viewExplanation) {
-      el.viewExplanation.hidden = !item.explanation;
-      el.viewExplanation.textContent = 'View Explanation';
-    }
-  
-    el.explanation.hidden = true;
-    el.explanation.textContent = item.explanation || '';
-  
-    // Update the sentence to show the result (replace input with answer display)
-    const pinyinHtml = renderPinyin(item);
+    // Update the sentence to show the result
     const parts = item.sentence.split(/_{2,}/);
     const before = escapeHtml(parts[0] || '');
     const after = escapeHtml(parts[1] || '');
+    const correctAnswer = escapeHtml(primaryAnswer(item));
     
+    // Build the result HTML with appropriate color
+    let resultHtml = '';
     if (correct) {
-      el.sentence.innerHTML = pinyinHtml + before + 
-        '<span class="answer-correct">' + escapeHtml(given) + '</span>' + 
+      // Green for correct answers
+      resultHtml = before + 
+        '<span class="answer-correct">' + correctAnswer + '</span>' + 
         after;
     } else {
-      el.sentence.innerHTML = pinyinHtml + before + 
-        '<span class="answer-wrong">' + escapeHtml(given) + '</span>' +
-        '<span class="answer-correct">' + escapeHtml(primaryAnswer(item)) + '</span>' + 
+      // Red for incorrect answers
+      resultHtml = before + 
+        '<span class="answer-incorrect">' + correctAnswer + '</span>' + 
         after;
+    }
+    
+    // Add pinyin if available
+    if (item.pinyin) {
+      resultHtml += '<div class="sentence-pinyin-answer">' + escapeHtml(item.pinyin) + '</div>';
+    }
+    
+    el.sentence.innerHTML = resultHtml;
+  
+    // Handle explanation based on correct/incorrect
+    if (correct) {
+      // For correct answers: show the View Explanation button (hidden by default)
+      if (el.viewExplanation) {
+        el.viewExplanation.hidden = !item.explanation;
+        el.viewExplanation.textContent = 'View Explanation';
+      }
+      // Keep explanation hidden initially
+      el.explanation.hidden = true;
+    } else {
+      // For incorrect answers: auto-show explanation and hide the button
+      if (item.explanation) {
+        el.explanation.hidden = false;
+        el.explanation.textContent = item.explanation;
+      } else {
+        el.explanation.hidden = true;
+      }
+      // Hide the View Explanation button for incorrect answers
+      if (el.viewExplanation) {
+        el.viewExplanation.hidden = true;
+      }
+    }
+  
+    // ALWAYS show the Next button
+    if (el.postCheckRow) {
+      el.postCheckRow.hidden = false;
     }
   }
 
@@ -1190,20 +1209,28 @@ sentences.forEach(function(item) {
       });
     }
     
-    // Add pinyin toggle listener
-    if (el.showPinyinToggle) {
-      el.showPinyinToggle.addEventListener('change', function () {
-        setShowPinyin(el.showPinyinToggle.checked);
-        // If currently in game view, refresh the current question to show/hide pinyin
-        if (el.playContent && el.playContent.classList.contains('play-content--game') && sessionSentences[index]) {
-          showQuestion();
-        }
-        // If in review view, refresh the review
-        if (el.playContent && el.playContent.classList.contains('play-content--review')) {
-          showSessionReview();
-        }
-      });
+// Add pinyin toggle listener
+if (el.showPinyinToggle) {
+  console.log('Pinyin toggle found'); // Debug log
+  // Set initial state
+  el.showPinyinToggle.checked = getShowPinyin();
+  
+  el.showPinyinToggle.addEventListener('change', function () {
+    console.log('Pinyin toggled to:', el.showPinyinToggle.checked); // Debug log
+    setShowPinyin(el.showPinyinToggle.checked);
+    
+    // If currently in game view, refresh the current question
+    if (el.playContent && el.playContent.classList.contains('play-content--game') && sessionSentences[index]) {
+      showQuestion();
     }
+    // If in review view, refresh the review
+    if (el.playContent && el.playContent.classList.contains('play-content--review')) {
+      showSessionReview();
+    }
+  });
+} else {
+  console.log('Pinyin toggle NOT found'); // Debug log
+}
     
     if (el.playSettingsBtn) el.playSettingsBtn.addEventListener('click', openPlaySettingsModal);
     if (el.playSettingsClose) el.playSettingsClose.addEventListener('click', closePlaySettingsModal);
