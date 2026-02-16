@@ -418,6 +418,19 @@ function restoreFromFile(file) {
     } catch (_) {}
   }
 
+  function getShowPinyin() {
+    try {
+      return localStorage.getItem('cloze-show-pinyin') === 'true';
+    } catch (_) {}
+    return false;
+  }
+
+  function setShowPinyin(on) {
+    try {
+      localStorage.setItem('cloze-show-pinyin', on ? 'true' : 'false');
+    } catch (_) {}
+  }
+
   function renderNativeSentence(item, highlight) {
     const text = item.nativeSentence || '';
     if (!text) return '';
@@ -1321,13 +1334,11 @@ if (el.uploadSaveFile) {
     if (el.insertBlankBtn) el.insertBlankBtn.addEventListener('click', insertBlankAtCursor);
     if (el.submitSentenceBtn) el.submitSentenceBtn.addEventListener('click', saveSentenceFromForm);
     if (el.cancelEditBtn) el.cancelEditBtn.addEventListener('click', cancelEdit);
-    let isComposing = false;  // Track IME composition state
-    
-    // Handle input events - but skip during IME composition
     el.answer.addEventListener('input', function (e) {
-      // Don't update during IME composition - wait until compositionend
-      if (!isComposing) {
-        updateInlineBlank();
+      // Sync hidden input to inline input (if present)
+      const inlineInput = document.getElementById('inlineAnswerInput');
+      if (inlineInput && inlineInput.value !== el.answer.value) {
+        inlineInput.value = el.answer.value;
       }
     });
 
@@ -1358,7 +1369,6 @@ document.addEventListener('keydown', function(e) {
 });
   
 
-    setupInlineBlankFocus();
   }
 
   init();
